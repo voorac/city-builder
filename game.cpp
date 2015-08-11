@@ -12,26 +12,26 @@ Game::Game() : window(sf::VideoMode(800, 600), "City Builder") {
 
 Game::~Game() {}
 
-void Game::pushState(GameState* state) {
-    states.push(state);
+void Game::pushState(std::unique_ptr<GameState> & state) {
+    states.push(std::move(state));
 }
 
 void Game::popState() {
     states.pop();
 }
 
-void Game::changeState(GameState* state) {
+void Game::changeState(std::unique_ptr<GameState> & state) {
     if (!states.empty()) {
         popState();
     }
     pushState(state);
 }
 
-GameState* Game::peekState() {
+std::unique_ptr<GameState> Game::peekState() {
     if (states.empty()) {
         return NULL;
     }
-    return states.top();
+    return std::move(states.top());
 }
 
 void Game::gameLoop() {
