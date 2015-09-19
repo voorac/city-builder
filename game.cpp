@@ -1,10 +1,9 @@
 #include "game.hpp"
 
-#include <stack>
-
 #include <SFML/Window.hpp>
 
 #include "game_state.hpp"
+
 
 Game::Game() : window(sf::VideoMode(800, 600), "City Builder") {
     window.setFramerateLimit(60);
@@ -29,7 +28,7 @@ void Game::changeState(std::unique_ptr<GameState> & state) {
 
 std::unique_ptr<GameState> Game::peekState() {
     if (states.empty()) {
-        return NULL;
+        return std::unique_ptr<GameState>();
     }
     return std::move(states.top());
 }
@@ -41,7 +40,7 @@ void Game::gameLoop() {
         sf::Time elapsed = clock.restart();
         float dt = elapsed.asSeconds();
 
-        if (peekState() == NULL) {
+        if (!peekState()) {
             continue;
         }
 

@@ -10,7 +10,7 @@ class GameState;
 
 class Game {
 public:
-    std::stack<std::unique_ptr<GameState>> states;
+    std::stack<std::unique_ptr<GameState> > states;
     sf::RenderWindow window;
 
     Game();
