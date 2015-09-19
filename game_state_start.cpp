@@ -22,7 +22,7 @@ void GameStateStart::draw(const float dt)
 {
     this->game->window.setView(this->view);
     this->game->window.clear(sf::Color::Black);
-    //this->game->window.draw(this->game->background);
+    this->game->window.draw(this->game->background);
 }
 
 void GameStateStart::update(const float dt)
@@ -42,6 +42,18 @@ void GameStateStart::handleInput()
         case sf::Event::Resized:
         {
             this->view.setSize(event.size.width, event.size.height);
+            this->game->background
+                .setPosition(this->game->window
+                             .mapPixelToCoords(sf::Vector2i(0, 0),
+                                               this->view));
+            float xFactor = event.size.width /
+                static_cast<float>(this->game->background
+                                   .getTexture()->getSize().x);
+            float yFactor = event.size.height /
+                static_cast<float>(this->game->background
+                                   .getTexture()->getSize().y);
+            
+            this->game->background.setScale(xFactor, yFactor);
             break;
         }
         case sf::Event::KeyPressed:

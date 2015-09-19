@@ -6,7 +6,11 @@
 
 
 Game::Game() : window(sf::VideoMode(800, 600), "City Builder") {
+    this->loadTextures();
+    
     window.setFramerateLimit(60);
+
+    this->background.setTexture(this->textureManager.getRef("background"));
 }
 
 Game::~Game() {}
@@ -50,4 +54,10 @@ void Game::gameLoop() {
         peekState()->draw(dt);
         window.display();
     }
+}
+
+
+void Game::loadTextures()
+{
+    textureManager.loadTexture("background", "media/background.png");
 }

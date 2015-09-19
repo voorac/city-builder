@@ -6,12 +6,20 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "texture_manager.hpp"
+
+
 class GameState;
 
 class Game {
+private:
+    void loadTextures();
+    
 public:
     std::stack<std::unique_ptr<GameState> > states;
     sf::RenderWindow window;
+    TextureManager textureManager;
+    sf::Sprite background;
 
     Game();
     ~Game();
