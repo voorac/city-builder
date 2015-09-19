@@ -8,7 +8,7 @@
 
 class GameState {
 public:
-    std::weak_ptr<Game> game;
+    std::shared_ptr<Game> game;
 
     virtual void draw(const float dt) = 0;
     virtual void update(const float dt) = 0;
