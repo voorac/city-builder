@@ -16,7 +16,8 @@ add_executable(cityb
   game_state_start.cpp
   game_state_editor.cpp
   animation_handler.cpp
-  texture_manager.cpp)
+  texture_manager.cpp
+  tile.cpp)
 
 target_link_libraries(cityb ${SFML_SYSTEM_LIBRARY_DEBUG} ${SFML_WINDOW_LIBRARY_DEBUG} ${SFML_GRAPHICS_LIBRARY_DEBUG})
 

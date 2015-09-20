@@ -2,11 +2,13 @@
 
 #include <SFML/Window.hpp>
 
+#include "animation_handler.hpp"
 #include "game_state.hpp"
 
 
 Game::Game() : window(sf::VideoMode(800, 600), "City Builder") {
     this->loadTextures();
+    this->loadTiles();
     
     window.setFramerateLimit(60);
 
@@ -60,4 +62,56 @@ void Game::gameLoop() {
 void Game::loadTextures()
 {
     textureManager.loadTexture("background", "media/background.png");
+    textureManager.loadTexture("grass", "media/grass.png");
+    textureManager.loadTexture("forest", "media/forest.png");
+    textureManager.loadTexture("water", "media/water.png");
+    textureManager.loadTexture("residential", "media/residential.png");
+    textureManager.loadTexture("commercial", "media/commercial.png");
+    textureManager.loadTexture("industrial", "media/industrial.png");
+    textureManager.loadTexture("road", "media/road.png");
+}
+
+void Game::loadTiles()
+{
+    Animation staticAnim(0, 0, 1.0f);
+    this->tileAtlas["grass"] = 
+        Tile(this->tileSize, 1, textureManager.getRef("grass"),
+             { staticAnim }, TileType::GRASS, 50, 0, 1);
+    
+    tileAtlas["forest"] =
+        Tile(this->tileSize, 1, textureManager.getRef("forest"),
+             { staticAnim },
+             TileType::FOREST, 100, 0, 1);
+
+    tileAtlas["water"] =
+        Tile(this->tileSize, 1, textureManager.getRef("water"),
+             { Animation(0, 3, 0.5f),
+                     Animation(0, 3, 0.5f),
+                     Animation(0, 3, 0.5f) },
+             TileType::WATER, 0, 0, 1);
+
+    tileAtlas["residential"] =
+        Tile(this->tileSize, 2, textureManager.getRef("residential"),
+             { staticAnim, staticAnim, staticAnim,
+                     staticAnim, staticAnim, staticAnim },
+             TileType::RESIDENTIAL, 300, 50, 6);
+
+    tileAtlas["commercial"] =
+        Tile(this->tileSize, 2, textureManager.getRef("commercial"),
+             { staticAnim, staticAnim, staticAnim, staticAnim},
+             TileType::COMMERCIAL, 300, 50, 4);
+
+    tileAtlas["industrial"] =
+        Tile(this->tileSize, 2, textureManager.getRef("industrial"),
+             { staticAnim, staticAnim, staticAnim,
+                     staticAnim },
+             TileType::INDUSTRIAL, 300, 50, 4);
+
+    tileAtlas["road"] =
+        Tile(this->tileSize, 1, textureManager.getRef("road"),
+             { staticAnim, staticAnim, staticAnim,
+                     staticAnim, staticAnim, staticAnim,
+                     staticAnim, staticAnim, staticAnim,
+                     staticAnim, staticAnim },
+             TileType::ROAD, 100, 0, 1);
 }
