@@ -1,10 +1,14 @@
 #ifndef GAME_STATE_EDITOR_HPP
 #define GAME_STATE_EDITOR_HPP
 
+#include <map>
+#include <string>
+
 #include <SFML/Graphics.hpp>
 
 #include "game_state.hpp"
-#include "map.hpp"
+#include "gui.hpp"
+#include "city.hpp"
 
 enum class ActionState { NONE, PANNING, SELECTING };
 
@@ -14,11 +18,11 @@ private:
     sf::View gameView;
     sf::View guiView;
     ActionState actionState;
-    Map map;
+    City city;
 
     float zoomLevel;
     sf::Vector2i panningAnchor;
-
+    std::map<std::string, Gui> guiSystem;
 
     sf::Vector2i selectionStart;
     sf::Vector2i selectionEnd;

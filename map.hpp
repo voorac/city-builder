@@ -13,10 +13,10 @@ class Map
 {
 private:
     void _dfs(std::vector<TileType>& whiteList, sf::Vector2i pos, int label, int type);
-    std::vector<char> selected;
-    unsigned int numSelected;    
 
 public:
+    unsigned int numSelected;
+    std::vector<char> selected;
     unsigned int width;
     unsigned int height;
     std::vector<Tile> tiles;
