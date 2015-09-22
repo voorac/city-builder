@@ -13,6 +13,8 @@ class Map
 {
 private:
     void _dfs(std::vector<TileType>& whiteList, sf::Vector2i pos, int label, int type);
+    std::vector<char> selected;
+    unsigned int numSelected;    
 
 public:
     unsigned int width;
@@ -20,7 +22,6 @@ public:
     std::vector<Tile> tiles;
     std::vector<int> resources;
     unsigned int tileSize;
-    unsigned int numSelected;
     unsigned int numRegions[1];
 
     Map();
@@ -28,11 +29,15 @@ public:
         std::map<std::string, Tile>& tileAtlas);
 
     void load(const std::string& filename, unsigned int width,
-        unsigned int height, std::map<std::string, Tile>& tileAtlas);
+              unsigned int height, std::map<std::string, Tile>& tileAtlas);
     void save(const std::string& filename);
     void draw(sf::RenderWindow& window, float dt);
     void findConnectedRegions(std::vector<TileType> whitelist, int type);
     void updateDirection(TileType tileType);
+
+    // Selection methods
+    void select(sf::Vector2i start, sf::Vector2i end, std::vector<TileType> blacklist);
+    void clearSelected();
 };
 
 #endif // MAP_HPP

@@ -6,7 +6,7 @@
 #include "game_state.hpp"
 #include "map.hpp"
 
-enum class ActionState { NONE, PANNING };
+enum class ActionState { NONE, PANNING, SELECTING };
 
 class GameStateEditor : public GameState
 {
@@ -18,6 +18,11 @@ private:
 
     float zoomLevel;
     sf::Vector2i panningAnchor;
+
+
+    sf::Vector2i selectionStart;
+    sf::Vector2i selectionEnd;
+    Tile currentTile;
 
 public:
     GameStateEditor(std::shared_ptr<Game> game);

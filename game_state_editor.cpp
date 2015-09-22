@@ -21,6 +21,11 @@ GameStateEditor::GameStateEditor(std::shared_ptr<Game> game)
     sf::Vector2f centre(this->map.width, this->map.height*0.5);
     centre *= float(this->map.tileSize);
     gameView.setCenter(centre);
+
+    this->selectionStart = sf::Vector2i(0, 0);
+    this->selectionEnd = sf::Vector2i(0, 0);
+    this->currentTile = this->game->tileAtlas.at("grass");
+    
     this->actionState = ActionState::NONE;
 }
 
@@ -53,6 +58,39 @@ void GameStateEditor::handleInput()
                 gameView.move(-1.0f * pos * this->zoomLevel);
                 panningAnchor = sf::Mouse::getPosition(this->game->window);
             }
+            if (this->actionState == ActionState::SELECTING)
+            {
+                sf::Vector2f pos = this->game->
+                    window.mapPixelToCoords(sf::Mouse::getPosition(this->game->window),
+                                            this->gameView);
+                selectionEnd.x = pos.y / (this->map.tileSize)
+                    + pos.x / (2*this->map.tileSize)
+                    - this->map.width * 0.5 - 0.5;
+                selectionEnd.y = pos.y / (this->map.tileSize)
+                    - pos.x / (2*this->map.tileSize)
+                    + this->map.width * 0.5 + 0.5;
+
+                this->map.clearSelected();
+                if (this->currentTile.tileType == TileType::GRASS)
+                {
+                    this->map.select(selectionStart,
+                                     selectionEnd,
+                                     {this->currentTile.tileType, TileType::WATER});
+                }
+                else
+                {
+                    this->map.select(selectionStart, selectionEnd,
+                                     {
+                                         this->currentTile.tileType,
+                                             TileType::WATER,
+                                             TileType::RESIDENTIAL,
+                                             TileType::INDUSTRIAL,
+                                             TileType::FOREST,
+                                             TileType::ROAD,
+                                             TileType::COMMERCIAL,
+                                             });
+                }
+            } 
             break;
         }
         case sf::Event::MouseButtonPressed:
@@ -65,6 +103,30 @@ void GameStateEditor::handleInput()
                     this->panningAnchor = sf::Mouse::getPosition(this->game->window);
                 }
             }
+            else if (event.mouseButton.button == sf::Mouse::Left)
+            {
+                if (this->actionState != ActionState::SELECTING)
+                {
+                    this->actionState = ActionState::SELECTING;
+                    sf::Vector2f pos = this->game->window
+                        .mapPixelToCoords(sf::Mouse::getPosition(this->game->window),
+                                          this->gameView);
+                    selectionStart.x = pos.y / (this->map.tileSize)
+                        + pos.x / (2*this->map.tileSize)
+                        - this->map.width * 0.5 - 0.5;
+                    selectionStart.y = pos.y / (this->map.tileSize)
+                        - pos.x / (2*this->map.tileSize)
+                        + this->map.width * 0.5 + 0.5;
+                }
+            }
+            else if (event.mouseButton.button == sf::Mouse::Right)
+            {
+                if (this->actionState == ActionState::SELECTING)
+                {
+                    this->actionState = ActionState::NONE;
+                    this->map.clearSelected();
+                }
+            }
             break;
         }
         case sf::Event::MouseButtonReleased:
@@ -72,6 +134,14 @@ void GameStateEditor::handleInput()
             if (event.mouseButton.button == sf::Mouse::Middle)
             {
                 this->actionState = ActionState::NONE;
+            }
+            else if (event.mouseButton.button == sf::Mouse::Left)
+            {
+                if (this->actionState == ActionState::SELECTING)
+                {
+                    this->actionState = ActionState::NONE;
+                    this->map.clearSelected();
+                }
             }
             break;
         }
