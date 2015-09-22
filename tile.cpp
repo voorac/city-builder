@@ -15,6 +15,22 @@ std::string tileTypeToStr(TileType type)
     }
 }
 
+std::string tileTypeToIdStr(TileType type)
+{
+    switch (type)
+    {
+    default:
+    case TileType::VOID: return "void";
+    case TileType::GRASS: return "grass";
+    case TileType::FOREST: return "forest";
+    case TileType::WATER: return "water";
+    case TileType::RESIDENTIAL: return "residential";
+    case TileType::COMMERCIAL: return "commercial";
+    case TileType::INDUSTRIAL: return "industrial";
+    }
+}
+
+
 Tile::Tile ()
 {
 }

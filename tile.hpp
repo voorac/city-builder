@@ -19,6 +19,7 @@ enum class TileType
 };
 
 std::string tileTypeToStr(TileType type);
+std::string tileTypeToIdStr(TileType type);
 
 class Tile
 {
