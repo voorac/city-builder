@@ -6,9 +6,12 @@
 #include "game_state.hpp"
 
 
-Game::Game() : window(sf::VideoMode(800, 600), "City Builder") {
+Game::Game() : window(sf::VideoMode(800, 600), "City Builder")
+{
     this->loadTextures();
     this->loadTiles();
+    this->loadFonts();
+    this->loadStylesheets();
 
     window.setFramerateLimit(60);
 
@@ -17,36 +20,45 @@ Game::Game() : window(sf::VideoMode(800, 600), "City Builder") {
 
 Game::~Game() {}
 
-void Game::pushState(std::unique_ptr<GameState> state) {
+void Game::pushState(std::unique_ptr<GameState> state)
+{
     states.push(std::move(state));
 }
 
-void Game::popState() {
+void Game::popState()
+{
     states.pop();
 }
 
-void Game::changeState(std::unique_ptr<GameState> & state) {
-    if (!states.empty()) {
+void Game::changeState(std::unique_ptr<GameState> & state)
+{
+    if (!states.empty())
+    {
         popState();
     }
     pushState(std::move(state));
 }
 
-const std::unique_ptr<GameState> & Game::peekState() {
-    if (states.empty()) {
+const std::unique_ptr<GameState> & Game::peekState()
+{
+    if (states.empty())
+    {
         return nullptr;
     }
     return states.top();
 }
 
-void Game::gameLoop() {
+void Game::gameLoop()
+{
     sf::Clock clock;
 
-    while (window.isOpen()) {
+    while (window.isOpen())
+    {
         sf::Time elapsed = clock.restart();
         float dt = elapsed.asSeconds();
 
-        if (!peekState()) {
+        if (!peekState())
+        {
             continue;
         }
 
@@ -58,7 +70,8 @@ void Game::gameLoop() {
     }
 }
 
-void Game::loadTextures() {
+void Game::loadTextures()
+{
     textureManager.loadTexture("background", "media/background.png");
     textureManager.loadTexture("grass", "media/grass.png");
     textureManager.loadTexture("forest", "media/forest.png");
@@ -69,7 +82,8 @@ void Game::loadTextures() {
     textureManager.loadTexture("road", "media/road.png");
 }
 
-void Game::loadTiles() {
+void Game::loadTiles()
+{
     Animation staticAnim(0, 0, 1.0f);
     this->tileAtlas["grass"] =
         Tile(this->tileSize, 1, textureManager.getRef("grass"),
@@ -111,4 +125,22 @@ void Game::loadTiles() {
                 staticAnim, staticAnim, staticAnim,
                 staticAnim, staticAnim },
             TileType::ROAD, 100, 0, 1);
+}
+
+void Game::loadFonts()
+{
+    sf::Font font;
+    font.loadFromFile("media/font.ttf");
+    this->fonts["main_font"] = font;
+}
+
+void Game::loadStylesheets()
+{
+    this->stylesheets["button"] = GuiStyle(this->fonts.at("main_font"), 1,
+        sf::Color(0xc6, 0xc6, 0xc6), sf::Color(0x94, 0x94, 0x94), sf::Color(0x00, 0x00, 0x00),
+        sf::Color(0x61, 0x61, 0x61), sf::Color(0x94, 0x94, 0x94), sf::Color(0x00, 0x00, 0x00));
+
+    this->stylesheets["text"] = GuiStyle(this->fonts.at("main_font"), 0,
+        sf::Color(0x00, 0x00, 0x00, 0x00), sf::Color(0x00, 0x00, 0x00), sf::Color(0xff, 0xff, 0xff),
+        sf::Color(0x00, 0x00, 0x00, 0x00), sf::Color(0x00, 0x00, 0x00), sf::Color(0xff, 0x00, 0x00));
 }

@@ -10,6 +10,7 @@
 
 #include "texture_manager.hpp"
 #include "tile.hpp"
+#include "gui.hpp"
 
 
 class GameState;
@@ -18,6 +19,8 @@ class Game {
 private:
     void loadTextures();
     void loadTiles();
+    void loadStylesheets();
+    void loadFonts();
 
 public:
     const static int tileSize = 8;
@@ -27,6 +30,8 @@ public:
     TextureManager textureManager;
     sf::Sprite background;
     std::map<std::string, Tile> tileAtlas;
+    std::map<std::string, GuiStyle> stylesheets;
+    std::map<std::string, sf::Font> fonts;
 
     Game();
     ~Game();
